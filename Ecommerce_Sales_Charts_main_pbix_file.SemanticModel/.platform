@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Ecommerce_Sales_Charts_main_pbix_file"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0122e8a8-ab76-4c4e-bd46-75b1dcabf0d6"
+  }
+}

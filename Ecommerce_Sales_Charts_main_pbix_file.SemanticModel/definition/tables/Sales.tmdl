@@ -1,0 +1,447 @@
+table Sales
+	lineageTag: 21c6688f-36f1-4dc0-ae5f-97af07398269
+
+	measure 'Total Sales' = SUM(Sales[Sales Amount])
+		formatString: 0
+		lineageTag: 9bd6c98a-db35-4def-919e-4d3d8d8ebd1b
+
+	measure 'Total Quantity Sold' =
+			
+			SUM(Sales[Quantity])
+		formatString: 0
+		lineageTag: 12c82791-a646-48a9-90ed-81649775c253
+
+	measure 'Total Orders' =
+			
+			DISTINCTCOUNT(Sales[Order ID])
+		formatString: 0
+		lineageTag: 3fad01cb-81ba-4730-bf80-1cc75e9cc932
+
+	measure AOV =
+			
+			DIVIDE(
+			    [Total Sales],
+			    [Total Orders],
+			    0
+			)
+		lineageTag: 895892a5-3e3f-4b22-823d-2ad4c3b9ba30
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure AIPO =
+			
+			DIVIDE(
+			    [Total Quantity Sold],
+			    [Total Orders],
+			    0
+			)
+		lineageTag: ef06f7e5-5c5e-437f-91c8-9d6c86c6033d
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Customers' =
+			
+			DISTINCTCOUNT(Customers[Customer ID])
+		formatString: 0
+		lineageTag: e4da148a-2606-4311-bf22-ead42865e79a
+
+	measure ARPC =
+			
+			DIVIDE(
+			    [Total Sales],
+			    [Total Customers],
+			    0
+			)
+		lineageTag: e58f3620-b9a7-46ed-a4ea-fb045b6d820f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Sales All' = CALCULATE(SUM(Sales[Sales Amount]), ALL(Sales))
+		formatString: 0
+		lineageTag: f6febfda-1219-4e4b-bca9-8f1ea7f2e628
+
+	measure 'Total Orders All' = CALCULATE(DISTINCTCOUNT(Sales[Order ID]), ALL(Sales))
+		formatString: 0
+		lineageTag: a56a5607-9c50-4af9-b41a-f53fae0e2fb4
+
+	measure 'Total Customers All' = CALCULATE(DISTINCTCOUNT(Customers[Customer ID]), ALL(Sales))
+		formatString: 0
+		lineageTag: 04c97086-8fe2-4671-9f9a-e5dd9db978cd
+
+	measure 'AOV All' =
+			
+			DIVIDE(
+			    [Total Sales All],
+			    [Total Orders All],0
+			)
+		lineageTag: f52349b2-8f70-4d1c-b5b2-96f85ff3072b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'ARPC All' =
+			
+			DIVIDE(
+			    [Total Sales All],
+			    [Total Customers All],0
+			)
+		lineageTag: a25c2130-dd7a-492f-abf9-b0717d367d4e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Quantity Sold All' =
+			
+			CALCULATE(
+			    SUM(Sales[Quantity]),
+			    ALL(Sales)
+			)
+		formatString: 0
+		lineageTag: 48f9cb00-fc0f-4b07-bba0-ee699a877176
+
+	measure 'AIPO All' =
+			
+			DIVIDE(
+			    [Total Quantity Sold All],
+			    [Total Orders All],0
+			)
+		lineageTag: 1a1b5d5e-f65e-447a-aed4-3cbe2c27779c
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Discount Given' =
+			
+			CALCULATE(
+			    SUMX(
+			        Sales,
+			        Sales[Discount] * Sales[Product Amount]
+			    ),
+			    ALL(Products)
+			)
+		lineageTag: 590ec656-6d94-4b31-9830-8b87a93733b2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Profit' =
+			
+			[Total Sales] -
+			SUMX(
+			    Sales,
+			    Sales[Discount] * Sales[Product Amount]
+			)
+		lineageTag: 2223d612-13fa-4264-a272-3b84efd5c421
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Profit Margin' = [Total Profit] / [Total Sales]
+		lineageTag: 9e7a652a-8d18-45f1-bc75-fa297eaa45c5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Discount' =
+			
+			AVERAGE(Sales[Discount])
+		lineageTag: b9e64767-e6a9-4c21-9231-a29dbbe1f23a
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Average Delivery Time' =
+			
+			AVERAGE(Sales[Delivery Time])
+		lineageTag: 457bdbbb-9549-42a1-8b07-8bcb5a475688
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Min Discount' =
+			
+			MIN(Sales[Discount])
+		lineageTag: 4a6d5fb9-bc78-4cd4-bd5d-9ee05135a7b2
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Max Discount' =
+			
+			MAX(Sales[Discount])
+		lineageTag: fbf25b76-4f09-44f8-8cff-a0201992c8fe
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Max Delivery Time' =
+			
+			MAX(Sales[Delivery Time])
+		formatString: 0
+		lineageTag: c3606fb8-2bbe-467e-ab2e-f6a5e7f6c021
+
+	measure 'Min Delivery Time' =
+			
+			MIN(Sales[Delivery Time])
+		formatString: 0
+		lineageTag: a9021b7c-7142-493b-8ace-10ba1dfacfd7
+
+	column 'Order ID'
+		dataType: string
+		lineageTag: 94fc67f1-d2fd-40e1-95bc-78131940dbd6
+		summarizeBy: none
+		sourceColumn: Order ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Order Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 4280cfe9-c942-47a1-88ae-5ba36ddd5017
+		summarizeBy: none
+		sourceColumn: Order Date
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ship Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7d661971-abba-47b0-91c3-977a89fe68e9
+		summarizeBy: none
+		sourceColumn: Ship Date
+
+		variation Variation
+			isDefault
+			relationship: fd8984cf-46b1-4725-9191-5220d737aafb
+			defaultHierarchy: LocalDateTable_1366bc16-58d6-45d6-96e4-3aae76fb0d1c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Delivery Date'
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: a390ad56-2ebe-4801-bf44-80e93a52d4f6
+		summarizeBy: none
+		sourceColumn: Delivery Date
+
+		variation Variation
+			isDefault
+			relationship: 0c39fa45-5bb1-4186-a4dc-d40a77678a3d
+			defaultHierarchy: LocalDateTable_dc5b3bba-7951-4c53-82ec-e31845ffecd4.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Ship Mode'
+		dataType: string
+		lineageTag: 83378469-4720-4a49-912c-9f537c04d183
+		summarizeBy: none
+		sourceColumn: Ship Mode
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer ID'
+		dataType: string
+		lineageTag: 50565f26-ed43-4e17-accd-fad6137569c1
+		summarizeBy: none
+		sourceColumn: Customer ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product ID'
+		dataType: string
+		lineageTag: 2118057a-741b-4307-b61e-5d1ddcfdd80d
+		summarizeBy: none
+		sourceColumn: Product ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Quantity
+		dataType: int64
+		formatString: 0
+		lineageTag: 7eae2920-a046-4b6c-bb57-e95da0f302bd
+		summarizeBy: sum
+		sourceColumn: Quantity
+
+		annotation SummarizationSetBy = Automatic
+
+	column Discount
+		dataType: double
+		lineageTag: fc8a740f-fb7a-4faf-9c78-f8f8e53b42fd
+		summarizeBy: sum
+		sourceColumn: Discount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column 'Row ID'
+		dataType: int64
+		formatString: 0
+		lineageTag: e2c79177-ecf0-469b-bb84-976807c8b2a1
+		summarizeBy: count
+		sourceColumn: Row ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Discount Category'
+		dataType: string
+		lineageTag: 32b0e0d5-3be7-4a20-91a3-fc62ab08a8f4
+		summarizeBy: none
+		sourceColumn: Discount Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Products.Category'
+		dataType: string
+		lineageTag: 424e6f72-b889-47c8-b271-35f0b618b638
+		summarizeBy: none
+		sourceColumn: Products.Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Products.Sub-Category'
+		dataType: string
+		lineageTag: 74a9a86f-aadc-4226-8d8f-67858724065d
+		summarizeBy: none
+		sourceColumn: Products.Sub-Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Products.Product Name'
+		dataType: string
+		lineageTag: d317848c-3e9c-457c-bdba-4627807fee25
+		summarizeBy: none
+		sourceColumn: Products.Product Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Products.List price'
+		dataType: int64
+		formatString: 0
+		lineageTag: 82c19943-0088-43a6-bcf5-f42d3870f3f1
+		summarizeBy: sum
+		sourceColumn: Products.List price
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customers.Customer Name'
+		dataType: string
+		lineageTag: 6e736aa2-d000-4f2f-b2a8-8cb23e5c253e
+		summarizeBy: none
+		sourceColumn: Customers.Customer Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customers.Segment'
+		dataType: string
+		lineageTag: d832add0-96bc-466a-ac37-fe96df4ad3d6
+		summarizeBy: none
+		sourceColumn: Customers.Segment
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customers.Country'
+		dataType: string
+		lineageTag: 85764b65-3e9b-4590-9875-c896c2490b60
+		summarizeBy: none
+		sourceColumn: Customers.Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customers.City'
+		dataType: string
+		lineageTag: 792ece5f-3f78-4cf5-bd75-184077b8dc9b
+		summarizeBy: none
+		sourceColumn: Customers.City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customers.State'
+		dataType: string
+		lineageTag: a12f624f-c1bb-457d-bbf4-8cbb6254114b
+		summarizeBy: none
+		sourceColumn: Customers.State
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customers.Postal Code'
+		dataType: int64
+		formatString: 0
+		lineageTag: 705203b5-b1dd-448f-8280-97128de9b832
+		summarizeBy: count
+		sourceColumn: Customers.Postal Code
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customers.Region'
+		dataType: string
+		lineageTag: 3dd23ac3-6e26-47f6-8c86-cae67c0b2280
+		summarizeBy: none
+		sourceColumn: Customers.Region
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Product Amount'
+		dataType: int64
+		formatString: 0
+		lineageTag: ef8f70eb-72d2-489e-9399-0369268d43d7
+		summarizeBy: sum
+		sourceColumn: Product Amount
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sales Amount'
+		dataType: int64
+		lineageTag: 634494ea-2ebc-4694-b3f3-6936d0f2ed48
+		summarizeBy: sum
+		sourceColumn: Sales Amount
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Order_Line_ID
+		dataType: string
+		lineageTag: 30a9e315-4fcc-4188-ae5b-89cafb0cdf64
+		summarizeBy: none
+		sourceColumn: Order_Line_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Delivery Time'
+		dataType: int64
+		formatString: 0
+		lineageTag: e47cd7bc-a182-4f3d-a99c-6528752c0c7a
+		summarizeBy: sum
+		sourceColumn: Delivery Time
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Sales = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\Souradeep Singha\Downloads\0bon\QUESTION_Connection2POWERBI.xlsx"), null, true),
+				    Sales_Sheet = Source{[Item="Sales",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Sales_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Row ID", Int64.Type}, {"Order ID", type text}, {"Order Date", Int64.Type}, {"Ship Date", Int64.Type}, {"Delivery Date", Int64.Type}, {"Ship Mode", type text}, {"Customer ID", type text}, {"Product ID", type text}, {"Quantity", Int64.Type}, {"Discount", type number}, {"Column11", type any}}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Changed Type",{{"Order Date", type date}, {"Ship Date", type date}, {"Delivery Date", type date}, {"Discount", Percentage.Type}}),
+				    #"Filtered Rows" = Table.SelectRows(#"Changed Type1", each ([Quantity] <> 0)),
+				    #"Removed Blank Rows" = Table.SelectRows(#"Filtered Rows", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Removed Blank Rows1" = Table.SelectRows(#"Removed Blank Rows", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Removed Errors" = Table.RemoveRowsWithErrors(#"Removed Blank Rows1", {"Ship Mode", "Delivery Date", "Ship Date", "Customer ID", "Product ID", "Quantity", "Discount"}),
+				    #"Removed Errors1" = Table.RemoveRowsWithErrors(#"Removed Errors", {"Ship Mode", "Ship Date", "Delivery Date", "Customer ID", "Product ID", "Quantity", "Discount", "Order Date", "Order ID"}),
+				    #"Removed Blank Rows2" = Table.SelectRows(#"Removed Errors1", each not List.IsEmpty(List.RemoveMatchingItems(Record.FieldValues(_), {"", null}))),
+				    #"Filtered Rows1" = Table.SelectRows(#"Removed Blank Rows2", each ([Ship Mode] <> null)),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Filtered Rows1",{{"Order Date", type datetime}, {"Ship Date", type datetime}, {"Delivery Date", type datetime}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Changed Type2",{"Column11"}),
+				    #"Changed Type3" = Table.TransformColumnTypes(#"Removed Columns",{{"Row ID", Int64.Type}}),
+				    #"Added Conditional Column" = Table.AddColumn(#"Changed Type3", "Discount Category", each if [Discount] = 0 then "No Discount" else if [Discount] <= 0.1 then "Low" else if [Discount] <= 0.25 then "Medium" else "High"),
+				    #"Merged Queries" = Table.NestedJoin(#"Added Conditional Column", {"Product ID"}, Products, {"Product ID"}, "Products", JoinKind.LeftOuter),
+				    #"Expanded Products" = Table.ExpandTableColumn(#"Merged Queries", "Products", {"Category", "Sub-Category", "Product Name", "List price"}, {"Products.Category", "Products.Sub-Category", "Products.Product Name", "Products.List price"}),
+				    #"Merged Queries1" = Table.NestedJoin(#"Expanded Products", {"Customer ID"}, Customers, {"Customer ID"}, "Customers", JoinKind.LeftOuter),
+				    #"Expanded Customers" = Table.ExpandTableColumn(#"Merged Queries1", "Customers", {"Customer Name", "Segment", "Country", "City", "State", "Postal Code", "Region"}, {"Customers.Customer Name", "Customers.Segment", "Customers.Country", "Customers.City", "Customers.State", "Customers.Postal Code", "Customers.Region"}),
+				    #"Added Custom" = Table.AddColumn(#"Expanded Customers", "Product Amount", each [Quantity]*[Products.List price]),
+				    #"Added Custom1" = Table.AddColumn(#"Added Custom", "Sales Amount", each [Product Amount]-([Product Amount] * [Discount])),
+				    #"Changed Type4" = Table.TransformColumnTypes(#"Added Custom1",{{"Order Date", type datetime}}),
+				    #"Added Custom2" = Table.AddColumn(#"Changed Type4", "Order_Line_ID", each [Order ID] & "-" & [Product ID]),
+				    #"Changed Type5" = Table.TransformColumnTypes(#"Added Custom2",{{"Sales Amount", type number}}),
+				    #"Added Custom3" = Table.AddColumn(#"Changed Type5", "Delivery Time", each Duration.Days([Delivery Date] - [Order Date])),
+				    #"Changed Type6" = Table.TransformColumnTypes(#"Added Custom3",{{"Delivery Time", Int64.Type}, {"Product Amount", Int64.Type}, {"Sales Amount", Int64.Type}})
+				in
+				    #"Changed Type6"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+
